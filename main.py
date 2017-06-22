@@ -12,6 +12,8 @@ question = "Do you want to continue as " + spy.salutation + " " + spy.name + " (
 existing = raw_input(question)
 # List with some default status messages
 STATUS_MESSAGES=["Prince", "Pri"]
+EMERGENCY_MESSAGES=["SOS","SAVE ME"]
+
 # Way to define a function
 def send_a_message():
     choose_a_friend= select_a_friend()
@@ -26,7 +28,7 @@ def send_a_message():
 
     print (colored("Your secret message image is ready!",'blue'))
 
-
+# Function to read a message
 def read_a_message():
     sender= select_a_friend()
     output_path=raw_input(colored("What is tha name of output image",'blue'))
@@ -38,12 +40,16 @@ def read_a_message():
         friends[sender].chats.append(new_chat)
     elif len(secret_text) > 100:
         del friends[sender]
+        print "Messages are deleted after crossing limit"
     else:
         print "image doesn't have any message"
+        for word in EMERGENCY_MESSAGES:
+            if word == secret_text:
+                print "In trouble"
 
     print "Your secret message has been saved!"
 
-
+# Function for adding friends
 def add_friend():
     new_friend = Spy('', '', 0, 0.0)
     new_friend.name=raw_input("Please add your friend's name")
@@ -63,7 +69,7 @@ def add_friend():
 
     return len(friends)
 
-
+# Function for selecting friends
 def select_a_friend():
     item_number = 0
 
@@ -79,7 +85,7 @@ def select_a_friend():
 
     return friend_choice_position
 
-
+# Function to add status
 def add_status():
     updated_status_message = None
     if spy.current_status_message != None:
@@ -87,6 +93,7 @@ def add_status():
     else:
         print "You don\'t have any status message currently \n"
     default = raw_input("Do you want to select from the older status (y/n)? ")
+    # upper is used to convert the input into upper case
     if default.upper() == "N":
         new_status_message = raw_input("What status message do you want to set?")
 
@@ -115,7 +122,7 @@ def read_chat_history():
 
         else:
             print "[%s] %s said: %s" % (chat.time.strftime(colored("%j, %a, %b %d %Y %H:%M:%S", 'red')), (colored(friends[read_for].name, 'green')), (colored(chat.message, 'magenta')))
-
+# Function to define menu for spyChat
 def start_chat(spy):
     print "Authentication complete. Welcome " + spy.name + " age: " \
           + str(spy.age) + " and rating of: " + str(spy.rating) + " Proud to have you onboard"
